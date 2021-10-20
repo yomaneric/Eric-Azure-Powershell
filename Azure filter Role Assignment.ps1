@@ -1,16 +1,21 @@
-﻿#Connect-AzAccount
+﻿#This script is for filtering the subscription-only IAM
+ 
+ $TenantId = "" # Enter Tenant ID
+ $SubscriptionId = "" # Enter Subscription ID
+ 
+ #Connect-AzAccount
 
-#Select-AzSubscription -tenant "97f55d35-1929-4acf-9c11-d7aaf05b6756"
+#Select-AzSubscription -tenant $TenantId
 
 $CsvFullPath = "C:\Azure.csv"
 
-$results = Get-AzRoleAssignment -Scope /subscriptions/1e984346-edba-4a2c-8888-cf0f668bea68
+$results = Get-AzRoleAssignment -Scope /subscriptions/{$SubscriptionId}
 
 $Global:ResultArray = @()
 
 foreach ($result in $results){
     
-    if ($result.Scope -eq "/subscriptions/1e984346-edba-4a2c-8888-cf0f668bea68") {
+    if ($result.Scope -eq "/subscriptions/{$SubscriptionId}") {
           $obj = New-Object -TypeName PSobject
           Add-Member -InputObject $obj -MemberType NoteProperty -Name "Scope" -Value $result.Scope
           Add-Member -InputObject $obj -MemberType NoteProperty -Name "SignInName" -Value $result.SignInName
